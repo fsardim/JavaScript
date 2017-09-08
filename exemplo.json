@@ -1,0 +1,9 @@
+{
+    "nome": "Felipe",
+    "idade": 31,
+    "sexo": "M",
+    "empresa": {
+        "nome": "RideO",
+        "local": "WeWork"
+    }
+}
