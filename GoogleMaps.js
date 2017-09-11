@@ -35,12 +35,12 @@ class Carona {
 }
 //Google Distance Matrix: Informações para consulta: https://www.npmjs.com/package/google-distance-matrix
 const distanceMatrix = require('google-distance-matrix');
-let indice = -1;
+let indice = 0;
 
 let mapUsuarios = new Map();
-mapUsuarios.set(++indice, new Usuario("Felipe", "Rua Marquês de Maricá, 660, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
-mapUsuarios.set(++indice, new Usuario("Lucas", "Rua Tupanaci, 77, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
-mapUsuarios.set(++indice, new Usuario("Blanes", "Rua Alencar Araripe, 789, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
+mapUsuarios.set(indice++, new Usuario("Felipe", "Rua Marquês de Maricá, 660, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
+mapUsuarios.set(indice++, new Usuario("Lucas", "Rua Tupanaci, 77, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
+mapUsuarios.set(indice++, new Usuario("Blanes", "Rua Alencar Araripe, 789, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
 
 //iterar por meio das chaves do Map
 for (var keyI of mapUsuarios.keys()) {
