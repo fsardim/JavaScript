@@ -1,0 +1,21 @@
+{
+  "name": "javascript",
+  "version": "1.0.0",
+  "description": "Aprendizado do curso de backend Web feito na Mastertech",
+  "main": "",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "fsardim"
+  },
+  "keywords": [
+    "Keywords"
+  ],
+  "author": "Felipe Sardim",
+  "license": "ISC",
+  "dependencies": {
+    "google-distance-matrix": "^1.0.0"
+  }
+}
