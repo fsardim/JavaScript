@@ -1,102 +1,57 @@
-class Usuario {
-    constructor(nome, endereco, enderecoTrabalho, tolerancia){
-        this.nome = nome;
-        this.endCasa = endereco;
-        this.endTrabalho = enderecoTrabalho;
-        this.distanciaTrabalho = 0;
-        if (tolerancia <= 1000)
-            this.toleranciaEmMetros = 1000;
-        else
-            this.toleranciaEmMetros = tolerancia;
-    }
-
-    getEnderecoCasa(){
-        return this.endCasa;
-    }
-    getEnderecoTrabalho(){
-        return this.endTrabalho;
-    }
-    getTolerancia(){
-        return this.toleranciaEmMetros;
-    }
-    setDistanciaTrabalaho(d){
-        this.distanciaTrabalho = d;
-    }
-}
-
-class Carona {
-    constructor(motorista, passageiro, tempoViagem, distancia){
-        this.idCarona = 0;
-        this.distancia = distancia;
-        this.tempoViagem = tempoViagem;
-        this.motorista = motorista;
-        this.passageiro = passageiro;
-    }
-}
 //Google Distance Matrix: Informações para consulta: https://www.npmjs.com/package/google-distance-matrix
-const distanceMatrix = require('google-distance-matrix');
-let indice = 0;
+const UsuarioSchema = require('./schemas/usuario');
+const CaronaSchema = require('./schemas/carona');
+const calculaDadosViagem = require('./functions/calculaDadosViagem');
 
 let mapUsuarios = new Map();
-mapUsuarios.set(indice++, new Usuario("Felipe", "Rua Marquês de Maricá, 660, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
-mapUsuarios.set(indice++, new Usuario("Lucas", "Rua Tupanaci, 77, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
-mapUsuarios.set(indice++, new Usuario("Blanes", "Rua Alencar Araripe, 789, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
+let indice = 0;
+mapUsuarios.set(indice++, new UsuarioSchema("Felipe", "Rua Marquês de Maricá, 660, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
+mapUsuarios.set(indice++, new UsuarioSchema("Lucas", "Rua Tupanaci, 77, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
+mapUsuarios.set(indice++, new UsuarioSchema("Blanes", "Rua Alencar Araripe, 789, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
+mapUsuarios.set(indice++, new UsuarioSchema("Thais", "Rua Marquês de Maricá, 660, São Paulo, SP", "Rua Dona Ana Néri, 368, São Paulo, SP", 1000));
 
-//iterar por meio das chaves do Map
-for (var keyI of mapUsuarios.keys()) {
-    for (var keyJ of mapUsuarios.keys()){
-        if (keyI !== keyJ){
+let a = 1;
+for(let keyI of mapUsuarios.keys()){
+    for(let keyJ of mapUsuarios.keys()){
+        if(keyI !== keyJ) {
             let origem = mapUsuarios.get(keyI).getEnderecoCasa();
             let trabalho = mapUsuarios.get(keyI).getEnderecoTrabalho();
             let colega = mapUsuarios.get(keyJ).getEnderecoCasa();
-            var respostaAPI = calculaDadosViagem(origem, colega, trabalho);
-            //console.log(respostaAPI) : undefined
-            //verificar se deu match. Se der match:
-            //  Criar objeto do tipo Carona e armazenar informações da carona
-            //      constructor: motorista, passageiro, tempoViagem, distancia
-            //  Remover ambos os usuários do mapa;
+            let respostaAPI = calculaDadosViagem(origem, colega, trabalho, (resposta) => {
+                console.log(`Callback #${a++} (${keyI},${keyJ})`);
+                // calcular tempo entre casa e trabalho
+                // verificar se deu match. Se der match:
+                // Criar objeto do tipo Carona e armazenar informações da carona
+                //  construtor: motorista, passageiro, tempoViagem, distancia
+                // Remover ambos os usuários do mapa;
+            });
         }
     }
 }
 
-function calculaDadosViagem(origem, colega, trabalho) {
-    //parâmetros de chamada
-    const apiKey = "";
-    let origens = [origem, colega];
-    let destinos = [colega, trabalho];
-    distanceMatrix.key(apiKey);
-    distanceMatrix.units("metric");
-    distanceMatrix.language("pt");
-    distanceMatrix.mode("driving"); //driving | walking | bicycling, default driving
-    const horaSaida = new Date(2017, 09, 11, 08, 00, 00, 000).getTime()*1000; //11.09.2017-8h00
-    distanceMatrix.departure_time(horaSaida);
-
-    //dados da viagem
-    let distanciaTotal = 0;
-    let tempo = 0;
-    let distanciaTrabalho = 0;
-
-    //chamada à API
-    distanceMatrix.matrix(origens, destinos, (erro, response) => {
-        if(erro)
-            return console.log(erro);
-        if(!response)
-            return console.log("Erro: Resposta não recebida");
-        if(response.status === "OK"){
-            for (var i=0; i < origens.length; i++) {
-                for (var j = 0; j < destinos.length; j++) {
-
-                    //calcula distância total da rota e distância do usuário avaliado ao trabalho
-                    if ((i === 0 && j === 0) || (i === 1 && j === 1)){
-                        distanciaTotal += response.rows[i].elements[j].distance.value;
-                        tempo += response.rows[i].elements[j].duration.value;
-                    } else if (i === 0 && j === 1)
-                        distanciaTrabalho = response.rows[i].elements[j].distance.value;
-
-                }
-            }
-            console.log(`Origens: ${origens}\nDestinos:${destinos}\nDistância total: ${distanciaTotal}, Distância do trabalho: ${distanciaTrabalho}, duração: ${tempo}\n`);
-            return [distanciaTotal, distanciaTrabalho, tempo];
-        }
-    });
-}
+/* RESPOSTA 
+Chamada à API
+Callback #1 (3,0)
+Chamada à API
+Callback #2 (0,3)
+Chamada à API
+Callback #3 (3,1)
+Chamada à API
+Callback #4 (1,0)
+Chamada à API
+Callback #5 (1,3)
+Chamada à API
+Callback #6 (0,1)
+Chamada à API
+Callback #7 (2,0)
+Chamada à API
+Callback #8 (3,2)
+Chamada à API
+Callback #9 (2,3)
+Chamada à API
+Callback #10 (0,2)
+Chamada à API
+Callback #11 (2,1)
+Chamada à API
+Callback #12 (1,2)
+*/
