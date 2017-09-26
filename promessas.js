@@ -22,19 +22,39 @@ var askMom = () => {
     console.log("Passei 4");
     willIGetNewPhone
     .then(function (fulfilled) {
-            console.log("Passei 5");
-            // yay, you got a new phone
-            console.log(fulfilled);
-            // output: { brand: 'Samsung', color: 'black' }
-        })
-        .catch(function (error) {
-            console.log("Passei 6");
-            // oops, mom don't buy it
-            console.log(error.message);
-            // output: 'mom is not happy'
-        });
-    };
-    
+        console.log("Passei 5");
+        // yay, you got a new phone
+        console.log(fulfilled);
+        // output: { brand: 'Samsung', color: 'black' }
+    })
+    .catch(function (error) {
+        console.log("Passei 6");
+        // oops, mom don't buy it
+        console.log(error.message);
+        // output: 'mom is not happy'
+    });
+};
+
 console.log("Passei 7");
 askMom();
 console.log("Passei 8");
+
+/* Resposta p/ isMomHappy = true
+Passei 1
+Passei 3
+Passei 7
+Passei 4
+Passei 8
+Passei 5
+{ brand: 'Samsung', color: 'black' }
+
+Resposta p/ isMomHappy = false
+Passei 2
+Passei 3
+Passei 7
+Passei 4
+Passei 8
+Passei 6
+mom is not happy
+*/
+
