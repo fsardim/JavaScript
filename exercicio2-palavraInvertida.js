@@ -6,7 +6,9 @@ const rl = readline.createInterface({
 });
 
 var novaPalavra = "";
-rl.question('Digite a palavra: ', (answer) => {
+// rl.question('Digite a palavra: ', function(answer) {
+rl.question('Digite a palavra: ', answer => {
+    console.log(answer);
     for (var index = 0; index < answer.length; index++) {
         novaPalavra = novaPalavra + answer[answer.length - index - 1];
     }
@@ -15,3 +17,4 @@ rl.question('Digite a palavra: ', (answer) => {
     
     rl.close();
 });
+// console.log('Passei');

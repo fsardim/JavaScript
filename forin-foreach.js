@@ -1,12 +1,15 @@
 //for each - captura o valor do elemento
-arrayExemplo = [5, 4, 3, 4, 5];
-for (let e of arrayExemplo){
+arrayExemplo = [5, 4, 3, 4, 1];
+let e, acumulador = 0;
+for (e of arrayExemplo){
     if (e % 2 === 0)
         console.log(e + " é par");
+    acumulador += e;
 }
+console.log(acumulador);
 
 //for in - captura o valor da posição do elemento
-for (let e in arrayExemplo) {
+for (e in arrayExemplo) {
     console.log(e);
 }
 
